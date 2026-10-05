@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: arena-game-server
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    disk:
+      name: arena-db
+      mountPath: /app/data
+      sizeGB: 1
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        value: Data Source=/app/data/arena.db
