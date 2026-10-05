@@ -70,20 +70,20 @@ app.MapGet("/leaderboard", async (AppDbContext db) =>
 // Last-20 completed matches
 app.MapGet("/matches", async (AppDbContext db) =>
 {
-    var rows = await db.MatchRecords
+    var raw = await db.MatchRecords
         .OrderByDescending(m => m.PlayedAt)
         .Take(20)
-        .Select(m => new
-        {
-            m.RoomCode,
-            m.WinnerName,
-            m.DurationSeconds,
-            Players = m.PlayerNames.Split(',', StringSplitOptions.RemoveEmptyEntries),
-            Kills   = m.PlayerKills.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                        .Select(k => int.TryParse(k, out var n) ? n : 0).ToArray(),
-            m.PlayedAt,
-        })
         .ToListAsync();
+    var rows = raw.Select(m => new
+    {
+        m.RoomCode,
+        m.WinnerName,
+        m.DurationSeconds,
+        Players = m.PlayerNames.Split(',', StringSplitOptions.RemoveEmptyEntries),
+        Kills   = m.PlayerKills.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(k => int.TryParse(k, out var n) ? n : 0).ToArray(),
+        m.PlayedAt,
+    });
     return Results.Json(rows);
 });
 
