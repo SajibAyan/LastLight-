@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 if (args.Contains("--self-test")) { GameTests.Run(); return; }
 
 var builder = WebApplication.CreateBuilder(args);
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://+:{port}");
 
 // ── Database ────────────────────────────────────────────────────────────────
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=arena.db";
