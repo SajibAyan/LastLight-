@@ -14,9 +14,10 @@ COPY --from=build /app .
 RUN mkdir -p /app/data && chown $APP_UID /app/data
 
 USER $APP_UID
-EXPOSE 8080
+EXPOSE 10000
 
 # DATABASE path is set via env var so it works locally and on any host.
 ENV ConnectionStrings__DefaultConnection="Data Source=/app/data/arena.db"
+ENV ASPNETCORE_HTTP_PORTS=10000
 
 ENTRYPOINT ["dotnet", "Lastlight.Server.dll"]
